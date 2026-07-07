@@ -1,0 +1,62 @@
+"use client";
+import React, { createContext, useContext, useMemo, Suspense } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
+interface StoreInterface {
+  isFetching: boolean;
+  isError: boolean;
+  isLoading: boolean;
+  data: any | undefined;
+  error: Error | null;
+  refetch: () => Promise<any>;
+}
+
+const StoreContext = createContext<StoreInterface | null>(null);
+
+function StoreContent({ children }: { children: React.ReactNode }) {
+  const { scholarshipId: id } = useParams();
+
+  const { isFetching, isError, isLoading, data, error, refetch } = useQuery<
+    any | undefined
+  >({
+    queryKey: ["scholarship-form", id],
+    queryFn: async () => {
+      const res = await fetch(`/api/v1/scholarship-form/${id}`);
+      const data = await res.json();
+      return data;
+    },
+
+    staleTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  });
+
+  return (
+    <StoreContext.Provider
+      value={{ isLoading, isError, isFetching, data, error, refetch }}
+    >
+      {children}
+    </StoreContext.Provider>
+  );
+}
+
+export const ScholarshipFormStore = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  return (
+    <Suspense fallback={<></>}>
+      <StoreContent>{children}</StoreContent>
+    </Suspense>
+  );
+};
+
+export const useScholarshipFormStore = () => {
+  const ctx = useContext(StoreContext);
+  if (!ctx)
+    throw new Error(
+      "useScholarshipFormStore must be used inside ScholarshipFormStore",
+    );
+  return ctx;
+};
