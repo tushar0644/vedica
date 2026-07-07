@@ -414,8 +414,7 @@ export function WorkDetailsForm({
           onSubmit={form.handleSubmit(onSubmit, onError)}
           className="space-y-8 px-4 py-5"
         >
-          {showWorkExperience && (
-            <section className="space-y-4">
+          <section className="space-y-4">
               <DynamicSelect
                 search={false}
                 form={form}
@@ -441,7 +440,7 @@ export function WorkDetailsForm({
                     </Button>
                   </div>
                   {/* @ts-ignore */}
-                  {form.watch("work_experience").map((_, index) => (
+                  {(Array.isArray(form.watch("work_experience")) ? form.watch("work_experience") : []).map((_, index) => (
                     <section key={index} className="space-y-5 border p-4">
                       <div className="flex items-center justify-between">
                         <h3 className="text-[16px] font-semibold text-[#293d8f]">
@@ -539,7 +538,6 @@ export function WorkDetailsForm({
                 </>
               )}
             </section>
-          )}
           {/* ================= INTERN EXPERIENCE ================= */}
           <section className="space-y-4">
             <DynamicSelect
@@ -567,7 +565,7 @@ export function WorkDetailsForm({
                   </Button>
                 </div>
                 {/* @ts-ignore */}
-                {form.watch("internship_details").map((_, index) => (
+                {(Array.isArray(form.watch("internship_details")) ? form.watch("internship_details") : []).map((_, index) => (
                   <section key={index} className="space-y-5 border p-4">
                     <div className="flex items-center justify-between">
                       <h3 className="text-[16px] font-semibold text-[#293d8f]">

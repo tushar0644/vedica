@@ -36,9 +36,9 @@ export const getInternDocType = async () => {
           description: field.description,
           options: field.options
             ? field.options
-                .split("\n")
-                .map((o: string) => o.trim())
-                .filter(Boolean)
+              .split("\n")
+              .map((o: string) => o.trim())
+              .filter(Boolean)
             : undefined,
         };
 
