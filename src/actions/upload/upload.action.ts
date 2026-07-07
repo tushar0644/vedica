@@ -1,5 +1,6 @@
 "use server";
 import axios from "axios";
+import { getFrappeError } from "@/utils";
 
 const BASE_URL = process.env.BACKEND_URL!;
 
@@ -30,10 +31,7 @@ export const uploadFile = async (file: File) => {
 
     return {
       success: false,
-      message:
-        JSON.parse(err.response?.data?._server_messages ?? "[]")[0]?.message ||
-        err?.response?.data?.message ||
-        "File upload failed",
+      message: getFrappeError(err, "File upload failed"),
     };
   }
 };

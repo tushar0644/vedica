@@ -2,12 +2,37 @@
 
 import React, { useEffect, useState } from "react";
 import { useApplicationFormListStore } from "@/store/application-form/list.store";
-import {
-  acceptOfferLetter,
-  getPaymentStatus,
-  createRazorpayOrder,
-  verifyRazorpayPayment,
-} from "@/actions/payments/payments.action";
+const acceptOfferLetter = async (application: string) => {
+  const res = await fetch("/api/v1/payments/accept-offer", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ application })
+  });
+  return res.json();
+};
+
+const getPaymentStatus = async (application: string) => {
+  const res = await fetch(`/api/v1/payments/status?application=${application}`);
+  return res.json();
+};
+
+const createRazorpayOrder = async (application: string, amount: number) => {
+  const res = await fetch("/api/v1/payments/create-order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ application, amount })
+  });
+  return res.json();
+};
+
+const verifyRazorpayPayment = async (payload: any) => {
+  const res = await fetch("/api/v1/payments/verify-payment", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+};
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import Script from "next/script";
@@ -146,7 +171,7 @@ export default function Payments() {
         key: key_id,
         amount: amountPaise,
         currency: "INR",
-        name: "Readiness Scholars Programme",
+        name: "Vedica Scholars Programme",
         description: `Admission Fee Payment for ${appId}`,
         order_id: order_id,
         handler: async function (response: any) {

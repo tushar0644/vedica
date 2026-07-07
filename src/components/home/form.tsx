@@ -215,7 +215,7 @@ function RegisterForm({ onSwitch }: { onSwitch: (m: Mode) => void }) {
         setVerificationSent(true);
       } else {
         toast.error(
-          res.message || "Verification Link has been sent to your email",
+          res.message || "Failed to register user",
         );
       }
     } catch (err) {

@@ -31,3 +31,35 @@ export const calculateAge = (date_of_birth: string) => {
   }
   return `${years} Years ${months} Months ${days} Days`;
 };
+
+export const getFrappeError = (err: any, fallbackMessage: string = "An error occurred"): string => {
+  try {
+    const serverMessages = err?.response?.data?._server_messages;
+    if (serverMessages) {
+      const parsed = JSON.parse(serverMessages);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        const firstMsg = typeof parsed[0] === 'string' ? JSON.parse(parsed[0]) : parsed[0];
+        if (firstMsg && firstMsg.message) {
+          return firstMsg.message.replace(/<[^>]*>/g, '').trim();
+        }
+      }
+    }
+
+    if (err?.response?.data?.exception) {
+      const exceptionStr = err.response.data.exception;
+      const parts = exceptionStr.split(':');
+      const cleanMsg = parts.pop()?.trim();
+      if (cleanMsg) {
+        return cleanMsg.replace(/<[^>]*>/g, '').trim();
+      }
+    }
+
+    if (err?.response?.data?.message) {
+      return String(err.response.data.message).replace(/<[^>]*>/g, '').trim();
+    }
+  } catch (e) {
+    console.error("Error parsing Frappe response", e);
+  }
+  return fallbackMessage;
+};
+

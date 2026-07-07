@@ -1,5 +1,6 @@
 "use server";
 import axios from "axios";
+import { getFrappeError } from "@/utils";
 
 const BASE_URL = process.env.BACKEND_URL!;
 
@@ -38,12 +39,11 @@ export const register = async (data: {
         "Verification Link has been sent to your email",
     };
   } catch (err: any) {
-    console.error("[REGISTER][ERROR]", err.response.data);
+    console.error("[REGISTER][ERROR]", err?.response?.data || err);
     return {
       success: false,
-      message:
-        // JSON.parse(err?.response?.data?._server_messages ?? "[]")[0]?.message ||
-        "Failed to register user",
+      message: getFrappeError(err, "Failed to register user"),
     };
   }
 };
+
