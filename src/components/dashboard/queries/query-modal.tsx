@@ -119,7 +119,9 @@ export default function QueriesModal({ children }: { children: ReactNode }) {
       let attachmentUrl: any = "";
 
       if (values.query_attachment) {
-        const fileRes = await uploadFile(values.query_attachment);
+        const formData = new FormData();
+        formData.append("file", values.query_attachment);
+        const fileRes = await uploadFile(formData);
         attachmentUrl = fileRes.url;
       }
 

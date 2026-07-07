@@ -166,7 +166,9 @@ export function DynamicFileInput({
                           // console.log("VALID FILE", file.name);
                         }
                         for (const file of selectedFiles) {
-                          const res = await uploadFile(file);
+                          const formData = new FormData();
+                          formData.append("file", file);
+                          const res = await uploadFile(formData);
 
                           if (!res.success) {
                             form.setError(name, {
