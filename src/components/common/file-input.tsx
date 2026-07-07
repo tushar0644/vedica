@@ -216,9 +216,9 @@ export function DynamicFileInput({
                 </label>
 
                 {files.length > 0 && (
-                  <div className="rounded border border-gray-200 bg-gray-50 ">
+                  <div className="rounded border border-gray-200 bg-gray-50 p-2 flex flex-col gap-2">
                     {files.map((url: string, index: number) => (
-                      <span key={`${url}-${index}`} className=" text-xs mr-1">
+                      <div key={`${url}-${index}`} className="flex items-center justify-between text-xs">
                         <a
                           href={`${process.env.NEXT_PUBLIC_DOMAIN}${url}`}
                           target="_blank"
@@ -227,7 +227,31 @@ export function DynamicFileInput({
                         >
                           {url.split("/").pop()}
                         </a>
-                      </span>
+                        <button
+                          type="button"
+                          disabled={disabled || uploading}
+                          onClick={async () => {
+                            if (multiple) {
+                              const updated = files.filter((_, i) => i !== index);
+                              form.setValue(name, updated, {
+                                shouldValidate: true,
+                                shouldDirty: true,
+                                shouldTouch: true,
+                              });
+                            } else {
+                              form.setValue(name, "", {
+                                shouldValidate: true,
+                                shouldDirty: true,
+                                shouldTouch: true,
+                              });
+                            }
+                            await form.trigger(name);
+                          }}
+                          className="text-red-500 hover:text-red-700 font-semibold px-2 py-0.5 border border-red-200 hover:border-red-400 rounded bg-white transition-colors"
+                        >
+                          Remove
+                        </button>
+                      </div>
                     ))}
                   </div>
                 )}

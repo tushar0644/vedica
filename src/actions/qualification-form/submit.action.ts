@@ -22,10 +22,17 @@ export const submitQualificationForm = async ({
 
     const cookieHeader = await getBackendCookieHeader();
 
+    const academicDetailsId = payload?.name || prev?.academic_details;
+
+    const firstPayload = {
+      ...payload,
+      name: academicDetailsId || undefined,
+    };
+
     // First API call
     const formData = new FormData();
     formData.append("web_form", "academic-details");
-    formData.append("data", JSON.stringify(payload));
+    formData.append("data", JSON.stringify(firstPayload));
 
     console.log("Creating academic details document...");
 
@@ -55,8 +62,8 @@ export const submitQualificationForm = async ({
 
     // Second API call
     const updatedPayload = {
-      name: academicId,
       ...payload,
+      name: academicId,
     };
 
     console.log("Updating academic details with payload:");
