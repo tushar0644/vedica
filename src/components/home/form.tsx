@@ -540,7 +540,11 @@ function ForgotForm({ onSwitch }: { onSwitch: (m: Mode) => void }) {
         email: d.email,
         redirectUrl: url.toString(),
       });
-      toast.info(res.message);
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong");
@@ -603,13 +607,15 @@ function ResetPasswordForm({ onSwitch }: { onSwitch: (m: Mode) => void }) {
     try {
       const token = searchParams.get("token");
       if (!token) {
-        toast.success("Unauthorised request made");
+        toast.error("Unauthorised request made");
         return;
       }
       const res = await resetPassword({ token, newPassword: d.password });
-      toast.info(res.message);
       if (res.success) {
+        toast.success(res.message);
         onSwitch("login");
+      } else {
+        toast.error(res.message);
       }
     } catch (err) {
       console.log(err);

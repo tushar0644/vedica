@@ -1,5 +1,6 @@
 "use server";
 import axios from "axios";
+import { getFrappeError } from "@/utils";
 
 const BASE_URL = process.env.BACKEND_URL!;
 
@@ -29,8 +30,8 @@ export const forgetPassword = async ({
     console.error("[FORGET PASSWORD][ERROR]", err);
     return {
       success: false,
-      message:
-        err?.response?.data?.message || "Failed to request password change",
+      message: getFrappeError(err, "Failed to request password change"),
     };
   }
 };
+
