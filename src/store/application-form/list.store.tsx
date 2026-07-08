@@ -21,8 +21,11 @@ function StoreContent({ children }: { children: React.ReactNode }) {
     queryFn: async () => {
       const res = await fetch("/api/v1/application-form");
       const data = await res.json();
-
-      return data.forms;
+      const forms = data.forms as ApplicationFormView[];
+      if (forms && Array.isArray(forms)) {
+        forms.sort((a, b) => b.name.localeCompare(a.name));
+      }
+      return forms;
     },
 
     staleTime: 1000 * 60 * 5,

@@ -11,9 +11,7 @@ export default function Applications() {
   if (data.length === 0) return <StartApplicationStatusCard />;
   return (
     <>
-      {data?.map((ele) => (
-        <ApplicationStatusCard {...ele}></ApplicationStatusCard>
-      ))}
+      <ApplicationStatusCard {...data[0]}></ApplicationStatusCard>
     </>
   );
 }

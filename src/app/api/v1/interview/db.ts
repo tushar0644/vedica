@@ -32,7 +32,8 @@ export async function getApplicationId(): Promise<string | null> {
   try {
     const res = await listApplicationForms();
     if (res.success && res.forms && res.forms.length > 0) {
-      return res.forms[0].name;
+      const sorted = [...res.forms].sort((a, b) => b.name.localeCompare(a.name));
+      return sorted[0].name;
     }
   } catch (e) {
     console.error("[INTERVIEW][DB][APP_ID_ERROR]", e);
