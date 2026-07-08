@@ -10,6 +10,7 @@ const BASE_URL = process.env.BACKEND_URL || "https://vedica.origensystems.com";
 
 interface DBData {
   bookings: Record<string, InterviewBooking>;
+  applications?: Record<string, Record<string, string>>;
 }
 
 // 1. Read Local Fallback DB

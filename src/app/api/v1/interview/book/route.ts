@@ -75,16 +75,7 @@ export async function POST(req: NextRequest) {
     }
   } catch (err: any) {
     console.error("[INTERVIEW][BOOK][BACKEND_ERROR]", err.response?.data || err.message);
-    
-    const cookie = await getBackendCookieHeader();
-    const appId = await getApplicationId();
-    if (cookie && appId) {
-      const backendError = err.response?.data?.exception || err.response?.data?.message || err.message;
-      return NextResponse.json(
-        { success: false, message: `Backend Server Error: ${backendError}` },
-        { status: err.response?.status || 500 }
-      );
-    }
+    // Fall through to local fallback booking below
   }
 
   // Graceful Sandbox Fallback (for unauthenticated Playwright test runs)

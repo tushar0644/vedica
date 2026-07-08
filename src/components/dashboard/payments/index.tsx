@@ -2,6 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { useApplicationFormListStore } from "@/store/application-form/list.store";
+import { useInterviewStatus } from "@/hooks/use-interview";
+import { isPaymentEligible } from "@/lib/interview-eligibility";
 const acceptOfferLetter = async (application: string) => {
   const res = await fetch("/api/v1/payments/accept-offer", {
     method: "POST",
@@ -66,10 +68,13 @@ export default function Payments() {
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
 
   // Find the first active/relevant application
-  // The workflow starts from 'Offer Letter Sent', 'Offer Letter Accepted', 'Payment Pending', or 'Enrolled'
   const activeApp = applications && applications.length > 0 ? (applications[0] as any) : null;
   const appId = activeApp?.name;
   const currentWorkflowState = activeApp?.workflow_state || "Draft";
+
+  // Check if interview is booked (required for payment eligibility)
+  const { data: interviewBooking, isLoading: interviewLoading } = useInterviewStatus();
+  const paymentAllowed = isPaymentEligible(activeApp, !!interviewBooking);
 
   // Fetch payment status if in payment-relevant states
   const isPaymentState = [
@@ -227,7 +232,7 @@ export default function Payments() {
     return paymentStatus.payments || paymentStatus.past_payments || [];
   };
 
-  if (appsLoading) {
+  if (appsLoading || interviewLoading) {
     return (
       <div className="flex h-64 items-center justify-center">
         <div className="h-10 w-10 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent"></div>
@@ -252,7 +257,25 @@ export default function Payments() {
           <div>
             <p className="font-semibold">Offer Letter Dependent Access</p>
             <p className="text-blue-600/90 mt-1">
-              Your application is currently in the **{currentWorkflowState}** state. Once your application is reviewed and an offer letter is issued (state changes to "Offer Letter Sent"), your payment methods and summary will unlock here automatically.
+              Your application is currently in the <strong>{currentWorkflowState}</strong> state. Once your application is reviewed and an offer letter is issued, your payment methods and summary will unlock here automatically.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Case: Interview not yet booked — gate payment behind interview completion
+  if (!paymentAllowed) {
+    return (
+      <div className="space-y-6">
+        <NoPayments />
+        <div className="rounded-lg border border-amber-100 bg-amber-50/50 p-4 flex gap-3 text-sm text-amber-700">
+          <Info className="h-5 w-5 shrink-0 text-amber-600" />
+          <div>
+            <p className="font-semibold">Interview Required</p>
+            <p className="text-amber-600/90 mt-1">
+              Complete your interview to unlock the payment section. Please schedule and complete your interview first, then return here to proceed with admission payment.
             </p>
           </div>
         </div>

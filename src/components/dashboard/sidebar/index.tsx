@@ -1,14 +1,4 @@
 "use client";
-import {
-  FileText,
-  CreditCard,
-  MessageSquare,
-  Mail,
-  HelpCircle,
-  Landmark,
-  Briefcase,
-  BookOpen,
-} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -16,7 +6,8 @@ import { menuItems } from "@/constants/ui";
 import { useMenu } from "@/provider/menu.provider";
 import { useAccountStore } from "@/store/user.store";
 import { useApplicationFormListStore } from "@/store/application-form/list.store";
-import { isInterviewEligible } from "@/lib/interview-eligibility";
+import { isInterviewEligible, isPaymentEligible } from "@/lib/interview-eligibility";
+import { useInterviewStatus } from "@/hooks/use-interview";
 
 function _Sidebar({ onClick }: { onClick: Function }) {
   const pathname = usePathname();
@@ -24,11 +15,18 @@ function _Sidebar({ onClick }: { onClick: Function }) {
   const { data: applications, isLoading: appsLoading } = useApplicationFormListStore();
 
   const activeApp = applications && applications.length > 0 ? applications[0] : null;
-  const isEligible = !appsLoading && isInterviewEligible(activeApp);
+  const interviewEligible = !appsLoading && isInterviewEligible(activeApp);
+
+  // Check if interview is booked for payment visibility
+  const { data: booking } = useInterviewStatus();
+  const paymentEligible = !appsLoading && isPaymentEligible(activeApp, !!booking);
 
   const filteredMenuItems = menuItems.filter((item) => {
     if (item.href === "/dashboard/interview") {
-      return isEligible;
+      return interviewEligible;
+    }
+    if (item.href === "/dashboard/payments") {
+      return paymentEligible;
     }
     return true;
   });

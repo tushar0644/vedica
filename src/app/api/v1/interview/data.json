@@ -1,3 +1,16 @@
 {
-  "bookings": {}
+  "bookings": {
+    "btushar370%40gmail.com": {
+      "referenceNumber": "VD-INT-W2AGA",
+      "candidateName": "Tushar Bhati",
+      "applicationNumber": "ADM-2026-00121",
+      "programApplied": "PG Programme in Management Practice and Leadership",
+      "email": "btushar370%40gmail.com",
+      "phone": "+91-9560750644",
+      "date": "2026-07-08",
+      "time": "05:07 AM",
+      "timezone": "IST (UTC+5:30)",
+      "mode": "Online"
+    }
+  }
 }

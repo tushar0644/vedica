@@ -39,7 +39,7 @@ export default function InterviewScheduler() {
     if (!appsLoading && !isEligible) {
       router.replace("/dashboard");
       toast.error(
-        "You can schedule your interview only after submitting your application and receiving your Offer Letter."
+        "You can schedule your interview after your application is submitted and your Offer Letter has been accepted."
       );
     }
   }, [isEligible, appsLoading, router]);
