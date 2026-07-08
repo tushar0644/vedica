@@ -651,7 +651,7 @@ export function ParentDetailsForm({
           </section>
           <ApplicationFormFooter
             form={form}
-            onSave={onSubmit}
+            onSave={handleSubmit}
             onBack={onBack}
             onNext={onNext}
             onExit={onExit}

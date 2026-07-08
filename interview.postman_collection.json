@@ -1,0 +1,176 @@
+{
+	"info": {
+		"_postman_id": "bbd8be6f-140c-4e73-8445-116c03cdf55e",
+		"name": "interview",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33235900",
+		"_collection_link": "https://w22222-2737.postman.co/workspace/Adinathtv~07c3c11f-c503-448b-99e9-6de8c5c0514d/collection/33235900-bbd8be6f-140c-4e73-8445-116c03cdf55e?action=share&source=collection_link&creator=33235900"
+	},
+	"item": [
+		{
+			"name": "get_available_interview_slots",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "data",
+							"value": "{\"first_name\":\"Riya\",\"email_id\":\"riya@example.com\",\"state_current_address\":\"Maharashtra\",\"city_current_address\":\"Pune\"}",
+							"type": "text"
+						},
+						{
+							"key": "web_form",
+							"value": "application-form",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vedica.origensystems.com/api/method/get_available_interview_slots?application=ADM-2026-00064&date=2026-07-01&user_timezone_offset=-330",
+					"protocol": "https",
+					"host": [
+						"vedica",
+						"origensystems",
+						"com"
+					],
+					"path": [
+						"api",
+						"method",
+						"get_available_interview_slots"
+					],
+					"query": [
+						{
+							"key": "application",
+							"value": "ADM-2026-00064"
+						},
+						{
+							"key": "date",
+							"value": "2026-07-01"
+						},
+						{
+							"key": "user_timezone_offset",
+							"value": "-330"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "schedule_interview",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://vedica.origensystems.com/api/method/schedule_interview?application=ADM-2026-00058&date=2026-07-01&start_time=2026-07-01 05:15:00%2B00:00&end_time=2026-07-01 06:00:00%2B00:00&user_timezone_offset=-330",
+					"protocol": "https",
+					"host": [
+						"vedica",
+						"origensystems",
+						"com"
+					],
+					"path": [
+						"api",
+						"method",
+						"schedule_interview"
+					],
+					"query": [
+						{
+							"key": "application",
+							"value": "ADM-2026-00058"
+						},
+						{
+							"key": "date",
+							"value": "2026-07-01"
+						},
+						{
+							"key": "start_time",
+							"value": "2026-07-01 05:15:00%2B00:00"
+						},
+						{
+							"key": "end_time",
+							"value": "2026-07-01 06:00:00%2B00:00"
+						},
+						{
+							"key": "user_timezone_offset",
+							"value": "-330"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_current_interview",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "application",
+							"value": "ADM-2026-00064",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://vedica.origensystems.com/api/method/get_current_interview",
+					"protocol": "https",
+					"host": [
+						"vedica",
+						"origensystems",
+						"com"
+					],
+					"path": [
+						"api",
+						"method",
+						"get_current_interview"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "cancel interview",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://vedica.origensystems.com/api/method/cancel_interview_slot?interview=IN-2026-00075&reason=Cancelled by counsellor",
+					"protocol": "https",
+					"host": [
+						"vedica",
+						"origensystems",
+						"com"
+					],
+					"path": [
+						"api",
+						"method",
+						"cancel_interview_slot"
+					],
+					"query": [
+						{
+							"key": "interview",
+							"value": "IN-2026-00075"
+						},
+						{
+							"key": "reason",
+							"value": "Cancelled by counsellor"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

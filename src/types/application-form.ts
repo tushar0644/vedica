@@ -12,6 +12,7 @@ export interface ApplicationFormView {
   docstatus: FormStatus;
   modified: string;
   enable_scholarship_form: number;
+  workflow_state?: string;
 }
 
 // {

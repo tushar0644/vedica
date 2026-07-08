@@ -7,6 +7,7 @@ import {
   Briefcase,
   BookOpen,
   HelpCircle,
+  Calendar,
 } from "lucide-react";
 
 export const menuItems = [
@@ -19,6 +20,11 @@ export const menuItems = [
     label: "My Payments",
     icon: CreditCard,
     href: "/dashboard/payments",
+  },
+  {
+    label: "My Interview",
+    icon: Calendar,
+    href: "/dashboard/interview",
   },
   {
     label: "My Queries",
@@ -51,6 +57,7 @@ export const menuItems = [
     href: "https://static.npfs.co/accounts/729/documents/2025/9/24/bc4a3b470d43454a86017a7f5419d99b_Brochure%20vFinal%202025.pdf",
   },
 ];
+
 
 export const communications = [
   {

@@ -1,5 +1,5 @@
 "use client";
-import PhoneInput, { getCountryCallingCode } from "react-phone-number-input";
+import PhoneInput, { getCountryCallingCode, parsePhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 
 import {
@@ -15,10 +15,33 @@ import { ApplicationFormDocType } from "@/types/application-form";
 import { cn } from "@/lib/utils";
 import { getMetaKey } from "./util";
 
-export const CustomInput = ({ className, ...props }: any) => {
+export const CustomInput = ({ className, onChange, value, ...props }: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    const digits = val.replace(/\D/g, "");
+
+    const spaceIndex = val.indexOf(" ");
+    let maxDigits = 15; // default fallback (E.164 maximum)
+
+    if (val.startsWith("+") && spaceIndex > 0) {
+      const countryCallingCode = val.slice(1, spaceIndex).replace(/\D/g, "");
+      if (countryCallingCode.length > 0) {
+        maxDigits = countryCallingCode.length + 10;
+      }
+    }
+
+    if (digits.length > maxDigits) {
+      return; // reject keystroke
+    }
+
+    onChange(e);
+  };
+
   return (
     <input
       {...props}
+      value={value}
+      onChange={handleChange}
       className={cn(
         "w-full border-0 bg-transparent outline-none",
         "focus-visible:ring-0 focus-visible:ring-offset-0",
@@ -86,10 +109,28 @@ export function DynamicPhoneInput({
                     return;
                   }
 
+                  try {
+                    const parsed = parsePhoneNumber(value);
+                    if (parsed) {
+                      const code = parsed.countryCallingCode;
+                      let number = parsed.nationalNumber;
+                      if (number.length > 10) {
+                        number = number.slice(0, 10);
+                      }
+                      field.onChange(`+${code}-${number}`);
+                      return;
+                    }
+                  } catch (e) {
+                    // ignore
+                  }
+
                   const code = getCountryCallingCode(defaultCountry as any);
 
                   if (value.startsWith(`+${code}`)) {
-                    const number = value.slice(code.length + 1);
+                    let number = value.slice(code.length + 1);
+                    if (number.length > 10) {
+                      number = number.slice(0, 10);
+                    }
 
                     field.onChange(`+${code}-${number}`);
                     return;

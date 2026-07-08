@@ -1261,7 +1261,7 @@ export function QualificationDetailsForm({
           </section>
           <ApplicationFormFooter
             form={form}
-            onSave={onSubmit}
+            onSave={handleQualificationFormSubmit}
             onBack={onBack}
             onNext={onNext}
             onExit={onExit}

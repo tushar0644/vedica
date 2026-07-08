@@ -15,10 +15,24 @@ import { usePathname } from "next/navigation";
 import { menuItems } from "@/constants/ui";
 import { useMenu } from "@/provider/menu.provider";
 import { useAccountStore } from "@/store/user.store";
+import { useApplicationFormListStore } from "@/store/application-form/list.store";
+import { isInterviewEligible } from "@/lib/interview-eligibility";
 
 function _Sidebar({ onClick }: { onClick: Function }) {
   const pathname = usePathname();
   const { data: user } = useAccountStore();
+  const { data: applications, isLoading: appsLoading } = useApplicationFormListStore();
+
+  const activeApp = applications && applications.length > 0 ? applications[0] : null;
+  const isEligible = !appsLoading && isInterviewEligible(activeApp);
+
+  const filteredMenuItems = menuItems.filter((item) => {
+    if (item.href === "/dashboard/interview") {
+      return isEligible;
+    }
+    return true;
+  });
+
   return (
     <>
       <aside className="flex h-full w-55 flex-col bg-base">
@@ -34,7 +48,7 @@ function _Sidebar({ onClick }: { onClick: Function }) {
 
         <nav className="flex-1 px-4 py-6">
           <div className="flex flex-col gap-2">
-            {menuItems.map((item) => {
+            {filteredMenuItems.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <Link
