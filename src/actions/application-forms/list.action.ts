@@ -2,6 +2,7 @@
 import { ApplicationFormView } from "@/types/application-form";
 import axios from "axios";
 import { getAuth, getBackendCookieHeader } from "../auth/get-auth";
+import { cookies } from "next/headers";
 
 const BASE_URL = process.env.BACKEND_URL!;
 export const listApplicationForms = async () => {
@@ -32,6 +33,19 @@ export const listApplicationForms = async () => {
     };
   } catch (err: any) {
     // console.error("[APPLICATION FORM][LIST][ERROR]", err.response.data);
+    const isUnauthorized = err?.response?.status === 401 || err?.response?.status === 403;
+    if (isUnauthorized) {
+      const cookieStore = await cookies();
+      const cookieNames = ["sid", "full_name", "user_id", "user_lang", "system_user", "frappe_sid", "frappe_csrf"];
+      cookieNames.forEach((name) => {
+        cookieStore.delete(name);
+      });
+      return {
+        success: false,
+        forms: [],
+        message: "Unauthorized",
+      };
+    }
     return {
       success: false,
       forms: [],

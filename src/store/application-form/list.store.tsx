@@ -21,6 +21,12 @@ function StoreContent({ children }: { children: React.ReactNode }) {
     queryFn: async () => {
       const res = await fetch("/api/v1/application-form");
       const data = await res.json();
+      if (!data.success && data.message === "Unauthorized") {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = "/?type=login";
+        return [];
+      }
       const forms = data.forms as ApplicationFormView[];
       if (forms && Array.isArray(forms)) {
         forms.sort((a, b) => b.name.localeCompare(a.name));
