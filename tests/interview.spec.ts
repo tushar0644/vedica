@@ -49,6 +49,25 @@ test.describe("Interview Scheduling Module", () => {
       }
     ]);
 
+    // Mock application forms list to return active form and bypass login redirects
+    await page.route("**/api/v1/application-form", (route) => {
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          forms: [
+            {
+              name: "ADM-2026-00121",
+              docstatus: 1,
+              modified: new Date().toISOString(),
+              enable_scholarship_form: 0,
+              workflow_state: "Offer Letter Accepted",
+            },
+          ],
+        }),
+      });
+    });
+
     // Navigate to the interview scheduling page
     await page.goto("/dashboard/interview");
   });

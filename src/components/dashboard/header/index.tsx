@@ -111,6 +111,8 @@ export default function Header() {
               className="cursor-pointer text-red-500 focus:text-red-500 text-xs!"
               onClick={async () => {
                 await logout();
+                localStorage.clear();
+                sessionStorage.clear();
                 window.location.href = "/";
               }}
             >

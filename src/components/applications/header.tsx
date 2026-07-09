@@ -52,7 +52,11 @@ const menuItems = [
     label: "Logout",
     href: "",
     onClick: () => {
-      logout().then(() => (window.location.href = "/"));
+      logout().then(() => {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = "/";
+      });
     },
     icon: LogOut,
   },

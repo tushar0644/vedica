@@ -54,8 +54,9 @@ export default function ApplicationHeader() {
       label: "Logout",
       href: "",
       onClick: async () => {
-        console.log("hello");
         await logout();
+        localStorage.clear();
+        sessionStorage.clear();
         window.location.href = "/";
       },
       icon: LogOut,

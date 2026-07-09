@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { isAuthenticated } from "./actions/auth/is-authenticated";
 import { saveTrackingCookies } from "./actions/extras/utm";
 
-const PUBLIC_ROUTES = ["/"];
+const PUBLIC_ROUTES = ["/", "/login", "/schedule"];
 
 const REQUIRED_COOKIES = [
   "sid",
@@ -45,6 +45,20 @@ export async function middleware(req: NextRequest) {
       req,
       NextResponse.redirect(new URL("/dashboard", req.url)),
     );
+  }
+
+  // Sync sid cookie to frappe_sid for the interview scheduler
+  const sid = req.cookies.get("sid")?.value;
+  const frappeSid = req.cookies.get("frappe_sid")?.value;
+  if (sid && frappeSid !== sid) {
+    const response = NextResponse.next();
+    response.cookies.set("frappe_sid", sid, {
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 86400,
+      path: "/",
+    });
+    return saveTrackingCookies(req, response);
   }
 
   return saveTrackingCookies(req, NextResponse.next());

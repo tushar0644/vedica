@@ -48,6 +48,9 @@
   --radius-4xl: calc(var(--radius) * 2.6);
   --color-base: #e89a56;
   --color-maroon: #6c0f11;
+  --color-brand-50: #fbf2f2;
+  --color-brand-500: #6c0f11;
+  --color-brand-600: #550c0d;
   --breakpoint-xs: 450px;
 }
 

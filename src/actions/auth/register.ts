@@ -40,9 +40,28 @@ export const register = async (data: {
     };
   } catch (err: any) {
     console.error("[REGISTER][ERROR]", err?.response?.data || err);
+    const rawError = getFrappeError(err, "Failed to register user");
+    
+    let cleanMessage = rawError;
+    const lowerError = rawError.toLowerCase();
+    
+    if (
+      lowerError.includes("email") && 
+      (lowerError.includes("exists") || lowerError.includes("unique") || lowerError.includes("duplicate"))
+    ) {
+      cleanMessage = "An account with this email address already exists.";
+    } else if (
+      (lowerError.includes("mobile") || lowerError.includes("phone")) && 
+      (lowerError.includes("exists") || lowerError.includes("unique") || lowerError.includes("duplicate"))
+    ) {
+      cleanMessage = "An account with this mobile number already exists.";
+    } else if (lowerError.includes("already exists") || lowerError.includes("duplicate")) {
+      cleanMessage = "An account with these details already exists.";
+    }
+
     return {
       success: false,
-      message: getFrappeError(err, "Failed to register user"),
+      message: cleanMessage,
     };
   }
 };

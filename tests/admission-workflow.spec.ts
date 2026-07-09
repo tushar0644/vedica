@@ -85,7 +85,7 @@ test.describe("Admission Workflow Visibility", () => {
     await page.waitForTimeout(2000);
 
     // Sidebar should show Application Form(s) link
-    await expect(page.locator("text=All Application Form(s)")).toBeVisible();
+    await expect(page.locator("aside:visible >> text=All Application Form(s)")).toBeVisible();
 
     // Interview and Payments should NOT be in sidebar
     const sidebarInterview = page.locator("aside >> text=My Interview");
@@ -124,7 +124,7 @@ test.describe("Admission Workflow Visibility", () => {
     await expect(page.locator("text=Offer Letter Accepted")).toBeVisible();
 
     // Interview link should be in sidebar
-    const sidebarInterview = page.locator("aside >> text=My Interview");
+    const sidebarInterview = page.locator("aside:visible >> text=My Interview");
     await expect(sidebarInterview).toBeVisible();
 
     // Interview Schedule step should be in card
@@ -155,7 +155,7 @@ test.describe("Admission Workflow Visibility", () => {
     await page.waitForTimeout(2000);
 
     // Payment link should be in sidebar
-    const sidebarPayments = page.locator("aside >> text=My Payments");
+    const sidebarPayments = page.locator("aside:visible >> text=My Payments");
     await expect(sidebarPayments).toBeVisible();
 
     // Payment step should be in card
